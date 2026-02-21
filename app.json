@@ -18,8 +18,14 @@
       "bundleIdentifier": "com.deucediary.mobile",
       "buildNumber": "1",
       "associatedDomains": ["applinks:deucediary.app"],
+      "usesAppleSignIn": true,
       "config": {
         "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "SKAdNetworkItems": [
+          { "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork" }
+        ]
       }
     },
     "android": {
