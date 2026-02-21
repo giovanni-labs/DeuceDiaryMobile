@@ -16,7 +16,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.deucediary.mobile",
-      "associatedDomains": ["applinks:deucediary.app"]
+      "buildNumber": "1",
+      "associatedDomains": ["applinks:deucediary.app"],
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -33,6 +37,9 @@
       "expo-router",
       "expo-font"
     ],
+    "extra": {
+      "apiUrl": "process.env.EXPO_PUBLIC_API_URL"
+    },
     "intentFilters": [
       {
         "action": "VIEW",
