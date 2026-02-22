@@ -6,9 +6,11 @@ import {
   StyleSheet,
   RefreshControl,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useQueryFeed } from "../../../hooks/useQueryFeed";
+import { useAuth } from "../../../hooks/useAuth";
 import { addReaction } from "../../../api/deuces";
 import { Colors } from "../../../constants/colors";
 import type { Deuce } from "../../../types/api.types";
@@ -130,8 +132,66 @@ function FeedCard({
   );
 }
 
+// ── Free tier home screen ──
+function FreeHome() {
+  const router = useRouter();
+  const { user } = useAuth();
+
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.freeContent}
+    >
+      {/* Log Deuce — the one free action */}
+      <TouchableOpacity
+        style={styles.logButton}
+        onPress={() => router.push("/modals/log-a-deuce")}
+        activeOpacity={0.85}
+      >
+        <Text style={styles.logButtonEmoji}>🚽</Text>
+        <Text style={styles.logButtonText}>Log a Deuce</Text>
+      </TouchableOpacity>
+
+      {/* Total Deuces stat */}
+      <View style={styles.statCard}>
+        <View>
+          <Text style={styles.statLabel}>TOTAL DEUCES</Text>
+          <Text style={styles.statNumber}>{user?.deuceCount ?? 0}</Text>
+        </View>
+        <View style={styles.statIcon}>
+          <Text style={{ fontSize: 28 }}>💩</Text>
+        </View>
+      </View>
+
+      {/* Premium upsell */}
+      <View style={styles.upsellCard}>
+        <Text style={styles.upsellCrown}>👑</Text>
+        <Text style={styles.upsellTitle}>
+          Unlock the Full Throne Experience
+        </Text>
+
+        <View style={styles.upsellBullets}>
+          <Text style={styles.upsellBullet}>🏆  Compete with your squad</Text>
+          <Text style={styles.upsellBullet}>🔥  Track your streaks</Text>
+          <Text style={styles.upsellBullet}>🎨  Custom themes</Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.upsellButton}
+          onPress={() => router.push("/premium")}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.upsellButtonText}>Go Premium</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+}
+
 export default function HomeScreen() {
   const router = useRouter();
+  const { user } = useAuth();
+  const isFree = user?.subscription !== "premium";
   const { data: feed, isLoading, refetch, isRefetching } = useQueryFeed();
 
   const handleReact = useCallback(
@@ -144,6 +204,8 @@ export default function HomeScreen() {
     },
     []
   );
+
+  if (isFree) return <FreeHome />;
 
   if (isLoading) {
     return (
@@ -295,4 +357,120 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   fabEmoji: { fontSize: 28 },
+
+  // ── Free tier styles ──
+  freeContent: {
+    padding: 20,
+    paddingBottom: 120,
+    alignItems: "center",
+  },
+  logButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.green,
+    width: "100%",
+    paddingVertical: 18,
+    borderRadius: 20,
+    marginBottom: 24,
+    shadowColor: Colors.green,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  logButtonEmoji: {
+    fontSize: 28,
+    marginRight: 12,
+  },
+  logButtonText: {
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  statCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    width: "100%",
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  statLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: Colors.secondaryText,
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  statNumber: {
+    fontSize: 40,
+    fontWeight: "900",
+    color: Colors.espresso,
+  },
+  statIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: "rgba(45, 138, 78, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  upsellCard: {
+    backgroundColor: Colors.white,
+    width: "100%",
+    borderRadius: 20,
+    padding: 24,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  upsellCrown: {
+    fontSize: 40,
+    marginBottom: 8,
+  },
+  upsellTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: Colors.espresso,
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  upsellBullets: {
+    width: "100%",
+    marginBottom: 20,
+    gap: 12,
+  },
+  upsellBullet: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.espresso,
+  },
+  upsellButton: {
+    backgroundColor: Colors.green,
+    width: "100%",
+    paddingVertical: 16,
+    borderRadius: 16,
+    alignItems: "center",
+    shadowColor: Colors.green,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  upsellButtonText: {
+    color: Colors.white,
+    fontSize: 17,
+    fontWeight: "bold",
+  },
 });
