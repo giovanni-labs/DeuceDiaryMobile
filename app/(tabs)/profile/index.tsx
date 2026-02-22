@@ -47,6 +47,13 @@ export default function ProfileScreen() {
           <Text style={styles.statLabel}>Total Deuces</Text>
         </View>
       </View>
+      <TouchableOpacity
+        style={styles.settingsButton}
+        onPress={() => router.push("/settings")}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.settingsText}>Theme & Settings</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
@@ -89,6 +96,16 @@ const styles = StyleSheet.create({
   statBox: { alignItems: "center", paddingHorizontal: 24 },
   statNumber: { fontSize: 32, fontWeight: "bold", color: Colors.gold },
   statLabel: { fontSize: 13, color: Colors.secondaryText, marginTop: 4 },
+  settingsButton: {
+    backgroundColor: Colors.white,
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 20,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+  },
+  settingsText: { fontSize: 16, color: Colors.espresso, fontWeight: "600" },
   logoutButton: {
     backgroundColor: Colors.lightGray,
     paddingVertical: 14,

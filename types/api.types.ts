@@ -6,6 +6,8 @@ export interface User {
   username: string | null;
   profileImageUrl: string | null;
   deuceCount: number;
+  subscription: "free" | "premium";
+  theme: string;
   createdAt: string;
   updatedAt: string;
 }
