@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "../lib/queryClient";
 import { useAuth, CLERK_ENABLED } from "../hooks/useAuth";
 import { useDeepLink } from "../hooks/useDeepLink";
+import { useNotifications } from "../hooks/useNotifications";
 import { hasCompletedOnboarding } from "./onboarding";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -25,6 +26,9 @@ function AuthGate() {
 
   // Activate deep link listener
   useDeepLink();
+
+  // Register push notifications & schedule streak reminder
+  useNotifications();
 
   // Check onboarding status on mount
   useEffect(() => {

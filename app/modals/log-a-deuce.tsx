@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { postDeuce } from "../../api/deuces";
 import { listSquads } from "../../api/squads";
+import { cancelStreakReminder } from "../../hooks/useNotifications";
 import { Colors } from "../../constants/colors";
 import type { Squad } from "../../types/api.types";
 
@@ -86,6 +87,7 @@ export default function LogADeuceModal() {
       });
 
       queryClient.invalidateQueries({ queryKey: ["feed"] });
+      cancelStreakReminder();
 
       setShowToast(true);
       setTimeout(() => {
