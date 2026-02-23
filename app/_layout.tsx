@@ -58,8 +58,8 @@ function AuthGate() {
     // Let invite deep links through regardless of auth state
     if (inInvite) return;
 
-    // Show onboarding on first launch (before auth)
-    if (needsOnboarding && !inOnboarding) {
+    // Show onboarding on first launch — skip if already authenticated
+    if (needsOnboarding && !inOnboarding && !isAuthenticated) {
       router.replace("/onboarding");
       return;
     }
