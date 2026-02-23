@@ -92,3 +92,10 @@ export interface GroupPreview {
   memberCount: number;
   description: string | null;
 }
+
+export interface LeaderboardEntry {
+  userId: string;
+  username: string | null;
+  profileImageUrl: string | null;
+  deuceCount: number;
+}

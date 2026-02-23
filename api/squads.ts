@@ -1,5 +1,5 @@
 import { api } from "./index";
-import type { Squad, SquadDetail, StreakData, InviteLink, GroupPreview } from "../types/api.types";
+import type { Squad, SquadDetail, StreakData, InviteLink, GroupPreview, LeaderboardEntry } from "../types/api.types";
 
 /** List all squads the user belongs to */
 export async function listSquads(): Promise<Squad[]> {
@@ -45,5 +45,11 @@ export async function createInvite(groupId: string): Promise<InviteLink> {
 /** Get group preview by invite code (no auth required) */
 export async function getGroupPreview(code: string): Promise<GroupPreview> {
   const { data } = await api.get<GroupPreview>(`/api/groups/preview/${code}`);
+  return data;
+}
+
+/** Get group leaderboard — ranked by total deuce count */
+export async function getGroupLeaderboard(groupId: string): Promise<LeaderboardEntry[]> {
+  const { data } = await api.get<LeaderboardEntry[]>(`/api/groups/${groupId}/leaderboard`);
   return data;
 }

@@ -276,6 +276,13 @@ export default function SquadDetailScreen() {
             <Text style={styles.inviteButtonText}>Invite Your Crew</Text>
           )}
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.leaderboardButton}
+          onPress={() => router.push({ pathname: "/(tabs)/squads/leaderboard", params: { groupId: squadId } })}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.leaderboardButtonText}>🏆 Leaderboard</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Streak Card */}
@@ -365,6 +372,20 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 15,
     fontWeight: "bold",
+  },
+  leaderboardButton: {
+    backgroundColor: "transparent",
+    paddingVertical: 10,
+    paddingHorizontal: 28,
+    borderRadius: 999,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: Colors.gold,
+  },
+  leaderboardButtonText: {
+    color: Colors.gold,
+    fontSize: 14,
+    fontWeight: "600",
   },
 
   // Streak Card
