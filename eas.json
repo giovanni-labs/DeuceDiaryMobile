@@ -9,12 +9,15 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://localhost:5001"
       }
     },
     "preview": {
       "distribution": "internal",
-      "ios": {
-        "enterprise": true
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://deuce-diary-web-production.up.railway.app"
       }
     },
     "production": {
@@ -22,6 +25,9 @@
       "autoIncrement": true,
       "ios": {
         "credentialsSource": "remote"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://deuce-diary-web-production.up.railway.app"
       }
     }
   },
@@ -29,7 +35,10 @@
     "production": {
       "ios": {
         "ascAppId": "",
-        "appleTeamId": ""
+        "appleTeamId": "",
+        "appleId": "giovannilabs@icloud.com",
+        "language": "en-US",
+        "sku": "com.deucediary.mobile"
       }
     }
   }
