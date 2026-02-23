@@ -49,6 +49,13 @@ export default function ProfileScreen() {
       </View>
       <TouchableOpacity
         style={styles.settingsButton}
+        onPress={() => router.push("/referral")}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.settingsText}>Refer Friends 🎁</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.settingsButton}
         onPress={() => router.push("/settings")}
         activeOpacity={0.7}
       >
