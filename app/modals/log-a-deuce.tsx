@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import * as Notifications from "expo-notifications";
 import { postDeuce } from "../../api/deuces";
 import { listSquads } from "../../api/squads";
 import { cancelStreakReminder } from "../../hooks/useNotifications";
@@ -80,7 +81,7 @@ export default function LogADeuceModal() {
 
     setSubmitting(true);
     try {
-      await postDeuce({
+      const result = await postDeuce({
         groupIds: selectedGroupIds,
         thoughts: thought.trim(),
         location: location.trim(),
@@ -88,6 +89,11 @@ export default function LogADeuceModal() {
 
       queryClient.invalidateQueries({ queryKey: ["feed"] });
       cancelStreakReminder();
+
+      // Update app icon badge to reflect new total deuce count
+      if (result?.count != null) {
+        Notifications.setBadgeCountAsync(result.count).catch(() => {});
+      }
 
       setShowToast(true);
       setTimeout(() => {

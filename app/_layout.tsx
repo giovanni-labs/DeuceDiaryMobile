@@ -7,6 +7,7 @@ import { useNotifications } from "../hooks/useNotifications";
 import { hasCompletedOnboarding } from "./onboarding";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import * as Notifications from "expo-notifications";
 
 // Conditional Clerk imports — only used when the env var is set.
 const ClerkProvider = CLERK_ENABLED
@@ -18,7 +19,7 @@ const tokenCache = CLERK_ENABLED
 const CLERK_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 function AuthGate() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const segments = useSegments();
   const router = useRouter();
   const [onboardingChecked, setOnboardingChecked] = useState(false);
@@ -29,6 +30,15 @@ function AuthGate() {
 
   // Register push notifications & schedule streak reminder
   useNotifications();
+
+  // Sync app icon badge to user's total deuce count
+  useEffect(() => {
+    if (isAuthenticated && user?.deuceCount != null) {
+      Notifications.setBadgeCountAsync(user.deuceCount).catch(() => {});
+    } else if (!isAuthenticated) {
+      Notifications.setBadgeCountAsync(0).catch(() => {});
+    }
+  }, [isAuthenticated, user?.deuceCount]);
 
   // Check onboarding status on mount
   useEffect(() => {
