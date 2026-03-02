@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 import { useQuery, useQueryClient, useQueries } from "@tanstack/react-query";
 import { listSquads, createSquad, getGroupStreak } from "../../../api/squads";
 import { useAuth } from "../../../hooks/useAuth";
-import { PremiumGate } from "../../../components/PremiumGate";
+import { usePaywall } from "../../../hooks/usePaywall";
 import { Colors } from "../../../constants/colors";
 import type { Squad, StreakData } from "../../../types/api.types";
 
@@ -36,7 +36,7 @@ function relativeTime(dateStr: string | null | undefined): string {
 export default function SquadsScreen() {
   const router = useRouter();
   const { user } = useAuth();
-  const isFree = user?.subscription !== "premium";
+  const { showPaywall } = usePaywall();
   const queryClient = useQueryClient();
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState("");
@@ -78,8 +78,13 @@ export default function SquadsScreen() {
       queryClient.invalidateQueries({ queryKey: ["squads"] });
       setNewName("");
       setShowCreate(false);
-    } catch {
-      Alert.alert("Error", "Could not create squad. Try again.");
+    } catch (err: any) {
+      // Backend returns 403 with upgrade:true when squad limit is hit
+      if (err?.response?.status === 403 && err.response.data?.feature === "unlimited_squads") {
+        showPaywall("unlimited_squads");
+      } else {
+        Alert.alert("Error", "Could not create squad. Try again.");
+      }
     } finally {
       setCreating(false);
     }
@@ -115,27 +120,6 @@ export default function SquadsScreen() {
           {relativeTime(item.lastActivity)}
         </Text>
       </TouchableOpacity>
-    );
-  }
-
-  if (isFree) {
-    return (
-      <View style={styles.container}>
-        <PremiumGate featureName="Squad Mode">
-          {/* Placeholder content behind the gate */}
-          <View style={styles.list}>
-            {[1, 2, 3].map((i) => (
-              <View key={i} style={styles.card}>
-                <View style={styles.cardTop}>
-                  <View style={{ width: 120, height: 18, backgroundColor: Colors.lightGray, borderRadius: 9 }} />
-                  <View style={{ width: 40, height: 14, backgroundColor: Colors.lightGray, borderRadius: 7 }} />
-                </View>
-                <View style={{ width: "100%", height: 14, backgroundColor: Colors.lightGray, borderRadius: 7, marginTop: 10 }} />
-              </View>
-            ))}
-          </View>
-        </PremiumGate>
-      </View>
     );
   }
 

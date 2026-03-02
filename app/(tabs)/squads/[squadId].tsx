@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,8 @@ import { getSquadDetail, getGroupStreak, createInvite } from "../../../api/squad
 import { getGroupFeed, addReaction } from "../../../api/deuces";
 import { useGroupSocket } from "../../../hooks/useGroupSocket";
 import { useAuth } from "../../../hooks/useAuth";
+import { useRevenueCat } from "../../../hooks/useRevenueCat";
+import { usePaywall } from "../../../hooks/usePaywall";
 import { Colors } from "../../../constants/colors";
 import type { Deuce, StreakData, SquadDetail } from "../../../types/api.types";
 
@@ -56,17 +58,29 @@ function getMilestoneLabel(streak: number): string {
 }
 
 // ─── Streak Card ─────────────────────────────────────────────
-function StreakCard({ streak }: { streak: StreakData }) {
+function StreakCard({
+  streak,
+  isPremium,
+  onStreakPaywall,
+  previousStreak,
+}: {
+  streak: StreakData;
+  isPremium: boolean;
+  onStreakPaywall: () => void;
+  previousStreak: number | null;
+}) {
   const active = streak.currentStreak > 0;
   const badge = getMilestoneBadge(streak.currentStreak);
   const milestoneLabel = getMilestoneLabel(streak.currentStreak);
+  // Trigger (e): streak was lost (previous was >0, now is 0)
+  const streakLost = previousStreak !== null && previousStreak > 0 && streak.currentStreak === 0;
 
   return (
     <View style={[styles.streakCard, active ? styles.streakCardActive : styles.streakCardInactive]}>
       {active ? (
         <>
           <View style={styles.streakTop}>
-            <Text style={styles.streakFlame}>🔥</Text>
+            <Text style={styles.streakFlame}>{"\uD83D\uDD25"}</Text>
             <Text style={styles.streakNumber}>{streak.currentStreak}</Text>
             {badge ? <Text style={styles.streakBadge}>{badge}</Text> : null}
           </View>
@@ -76,13 +90,41 @@ function StreakCard({ streak }: { streak: StreakData }) {
           {milestoneLabel ? (
             <Text style={styles.milestoneLabel}>{milestoneLabel}</Text>
           ) : null}
+
+          {/* Trigger (b): Streak Insurance button for free users */}
+          {!isPremium && (
+            <TouchableOpacity
+              style={styles.streakInsuranceButton}
+              onPress={onStreakPaywall}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.streakInsuranceText}>
+                {"\uD83D\uDEE1\uFE0F"} Streak Insurance
+              </Text>
+            </TouchableOpacity>
+          )}
         </>
       ) : (
         <>
-          <Text style={styles.streakZeroEmoji}>🚽</Text>
+          <Text style={styles.streakZeroEmoji}>{"\uD83D\uDEBD"}</Text>
           <Text style={styles.streakZeroText}>
             Start a streak — every member logs today to begin!
           </Text>
+
+          {/* Trigger (e): Streak loss prompt */}
+          {streakLost && !isPremium && (
+            <TouchableOpacity
+              style={styles.streakLossPrompt}
+              onPress={onStreakPaywall}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.streakLossEmoji}>{"\uD83D\uDCA8"}</Text>
+              <Text style={styles.streakLossTitle}>Never lose your streak again</Text>
+              <Text style={styles.streakLossSubtitle}>
+                Get Streak Insurance with Premium
+              </Text>
+            </TouchableOpacity>
+          )}
         </>
       )}
 
@@ -99,7 +141,7 @@ function StreakCard({ streak }: { streak: StreakData }) {
               {member.username}
             </Text>
             <Text style={styles.memberStatus}>
-              {member.hasLogged ? "✅" : "⏳"}
+              {member.hasLogged ? "\u2705" : "\u23F3"}
             </Text>
           </View>
         ))}
@@ -164,7 +206,11 @@ export default function SquadDetailScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { isPremium } = useRevenueCat();
+  const { showPaywall } = usePaywall();
   const [inviting, setInviting] = useState(false);
+  // Track previous streak value to detect streak loss
+  const previousStreakRef = useRef<number | null>(null);
 
   // Fetch group detail
   const {
@@ -186,6 +232,14 @@ export default function SquadDetailScreen() {
     enabled: !!squadId,
     staleTime: 1000 * 30,
   });
+
+  // Update previous streak ref AFTER render via useEffect so the
+  // current render still sees the old value for streak-loss detection.
+  useEffect(() => {
+    if (streak) {
+      previousStreakRef.current = streak.currentStreak;
+    }
+  }, [streak?.currentStreak]);
 
   // Fetch group feed via /api/deuces?groupId=
   const {
@@ -286,7 +340,14 @@ export default function SquadDetailScreen() {
       </View>
 
       {/* Streak Card */}
-      {streak ? <StreakCard streak={streak} /> : null}
+      {streak ? (
+        <StreakCard
+          streak={streak}
+          isPremium={isPremium}
+          onStreakPaywall={() => showPaywall("streak_insurance")}
+          previousStreak={previousStreakRef.current}
+        />
+      ) : null}
 
       {/* Feed label */}
       <Text style={styles.sectionLabel}>Group Feed</Text>
@@ -437,6 +498,48 @@ const styles = StyleSheet.create({
     color: Colors.secondaryText,
     textAlign: "center",
     lineHeight: 22,
+  },
+  // Streak Insurance button
+  streakInsuranceButton: {
+    marginTop: 12,
+    backgroundColor: "rgba(200, 169, 81, 0.12)",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: Colors.gold,
+  },
+  streakInsuranceText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: Colors.gold,
+  },
+  // Streak loss prompt
+  streakLossPrompt: {
+    marginTop: 14,
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    padding: 16,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Colors.gold,
+    width: "100%",
+  },
+  streakLossEmoji: {
+    fontSize: 24,
+    marginBottom: 6,
+  },
+  streakLossTitle: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: Colors.espresso,
+    textAlign: "center",
+    marginBottom: 4,
+  },
+  streakLossSubtitle: {
+    fontSize: 12,
+    color: Colors.gold,
+    fontWeight: "600",
   },
 
   // Member checklist

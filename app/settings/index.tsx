@@ -8,10 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
 import { Colors } from "../../constants/colors";
 import { useAuth } from "../../hooks/useAuth";
 import { useRevenueCat } from "../../hooks/useRevenueCat";
+import { usePaywall } from "../../hooks/usePaywall";
 import { api } from "../../api/index";
 
 type ThemeName = "default" | "dark" | "cream" | "midnight";
@@ -35,7 +35,7 @@ export default function SettingsScreen() {
   const [saving, setSaving] = useState(false);
   const { user } = useAuth();
   const { isPremium } = useRevenueCat();
-  const router = useRouter();
+  const { showPaywall } = usePaywall();
 
   // Load theme on mount
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function SettingsScreen() {
 
   async function handleSelect(theme: typeof THEMES[number]) {
     if (theme.premium && !isPremium) {
-      router.push("/premium");
+      showPaywall("custom_themes");
       return;
     }
 

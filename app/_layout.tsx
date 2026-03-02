@@ -4,6 +4,8 @@ import { queryClient } from "../lib/queryClient";
 import { useAuth, CLERK_ENABLED } from "../hooks/useAuth";
 import { useDeepLink } from "../hooks/useDeepLink";
 import { useNotifications } from "../hooks/useNotifications";
+import { PaywallProvider } from "../hooks/usePaywall";
+import { PaywallModal } from "./components/PaywallModal";
 import { hasCompletedOnboarding } from "./onboarding";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
@@ -75,7 +77,7 @@ function AuthGate() {
   }, [isAuthenticated, isLoading, segments, onboardingChecked, needsOnboarding]);
 
   return (
-    <>
+    <PaywallProvider segments={segments as string[]}>
       <StatusBar style="dark" />
       <OfflineBanner />
       <Stack screenOptions={{ headerShown: false }}>
@@ -96,7 +98,8 @@ function AuthGate() {
         <Stack.Screen name="settings/index" options={{ headerShown: true, title: "Settings" }} />
         <Stack.Screen name="referral/index" options={{ headerShown: true, title: "Refer Friends" }} />
       </Stack>
-    </>
+      <PaywallModal />
+    </PaywallProvider>
   );
 }
 
