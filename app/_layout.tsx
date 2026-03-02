@@ -8,6 +8,7 @@ import { hasCompletedOnboarding } from "./onboarding";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import * as Notifications from "expo-notifications";
+import { OfflineBanner } from "./components/OfflineBanner";
 
 // Conditional Clerk imports — only used when the env var is set.
 const ClerkProvider = CLERK_ENABLED
@@ -76,6 +77,7 @@ function AuthGate() {
   return (
     <>
       <StatusBar style="dark" />
+      <OfflineBanner />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="onboarding/index" />
         <Stack.Screen name="(tabs)" />

@@ -92,6 +92,8 @@ export default function SquadsScreen() {
         style={styles.card}
         onPress={() => router.push(`/squads/${item.id}` as any)}
         activeOpacity={0.7}
+        accessibilityLabel={`Open squad ${item.name}`}
+        accessibilityRole="button"
       >
         <View style={styles.cardTop}>
           <Text style={styles.name}>{item.name}</Text>
@@ -164,6 +166,8 @@ export default function SquadsScreen() {
             style={styles.createSubmit}
             onPress={handleCreate}
             disabled={creating}
+            accessibilityLabel="Create squad"
+            accessibilityRole="button"
           >
             {creating ? (
               <ActivityIndicator color={Colors.white} size="small" />
@@ -177,6 +181,8 @@ export default function SquadsScreen() {
               setNewName("");
             }}
             style={styles.createCancel}
+            accessibilityLabel="Cancel creating squad"
+            accessibilityRole="button"
           >
             <Text style={styles.createCancelText}>Cancel</Text>
           </TouchableOpacity>
@@ -186,6 +192,8 @@ export default function SquadsScreen() {
           style={styles.createButton}
           onPress={() => setShowCreate(true)}
           activeOpacity={0.8}
+          accessibilityLabel="Create a Squad"
+          accessibilityRole="button"
         >
           <Text style={styles.createButtonText}>+ Create a Squad</Text>
         </TouchableOpacity>

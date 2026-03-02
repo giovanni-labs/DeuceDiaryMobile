@@ -123,6 +123,8 @@ function FeedCard({
             style={styles.reactionButton}
             onPress={() => onReact(item.id, emoji)}
             activeOpacity={0.6}
+            accessibilityLabel={`React with ${emoji}`}
+            accessibilityRole="button"
           >
             <Text style={styles.reactionEmoji}>{emoji}</Text>
           </TouchableOpacity>
@@ -147,6 +149,8 @@ function FreeHome() {
         style={styles.logButton}
         onPress={() => router.push("/modals/log-a-deuce")}
         activeOpacity={0.85}
+        accessibilityLabel="Log a Deuce"
+        accessibilityRole="button"
       >
         <Text style={styles.logButtonEmoji}>🚽</Text>
         <Text style={styles.logButtonText}>Log a Deuce</Text>
@@ -180,6 +184,8 @@ function FreeHome() {
           style={styles.upsellButton}
           onPress={() => router.push("/premium")}
           activeOpacity={0.8}
+          accessibilityLabel="Go Premium"
+          accessibilityRole="button"
         >
           <Text style={styles.upsellButtonText}>Go Premium</Text>
         </TouchableOpacity>
@@ -253,6 +259,8 @@ export default function HomeScreen() {
         style={styles.fab}
         onPress={() => router.push("/modals/log-a-deuce")}
         activeOpacity={0.85}
+        accessibilityLabel="Log a Deuce"
+        accessibilityRole="button"
       >
         <Text style={styles.fabEmoji}>🚽</Text>
       </TouchableOpacity>
