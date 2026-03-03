@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
+import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../../constants/colors";
 import { useAuth } from "../../hooks/useAuth";
@@ -36,6 +37,7 @@ export default function SettingsScreen() {
   const { user } = useAuth();
   const { isPremium } = useRevenueCat();
   const { showPaywall } = usePaywall();
+  const router = useRouter();
 
   // Load theme on mount
   useEffect(() => {
@@ -109,6 +111,23 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         );
       })}
+
+      {/* Widget preview link */}
+      <TouchableOpacity
+        style={styles.widgetRow}
+        onPress={() => router.push("/settings/widget-preview")}
+        activeOpacity={0.7}
+        accessibilityLabel="Coming soon: home screen widget"
+        accessibilityRole="button"
+        accessibilityHint="See a preview of the upcoming home screen widget"
+      >
+        <Text style={styles.widgetEmoji}>{"\uD83D\uDD25"}</Text>
+        <View style={styles.widgetTextGroup}>
+          <Text style={styles.widgetTitle}>Home Screen Widget</Text>
+          <Text style={styles.widgetSubtitle}>Coming Soon</Text>
+        </View>
+        <Text style={styles.widgetChevron}>{"\u203A"}</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -176,5 +195,39 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     color: Colors.green,
+  },
+  // Widget link
+  widgetRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 28,
+    borderWidth: 1,
+    borderColor: Colors.gold,
+  },
+  widgetEmoji: {
+    fontSize: 24,
+    marginRight: 14,
+  },
+  widgetTextGroup: {
+    flex: 1,
+  },
+  widgetTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.espresso,
+  },
+  widgetSubtitle: {
+    fontSize: 12,
+    color: Colors.gold,
+    fontWeight: "600",
+    marginTop: 2,
+  },
+  widgetChevron: {
+    fontSize: 24,
+    color: Colors.gray,
+    fontWeight: "300",
   },
 });

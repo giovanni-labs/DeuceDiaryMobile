@@ -96,6 +96,7 @@ function AuthGate() {
         <Stack.Screen name="legacy/[username]" options={{ headerShown: true, title: "Legacy Wall" }} />
         <Stack.Screen name="premium/index" options={{ headerShown: true, title: "Premium" }} />
         <Stack.Screen name="settings/index" options={{ headerShown: true, title: "Settings" }} />
+        <Stack.Screen name="settings/widget-preview" options={{ headerShown: true, title: "Widget Preview" }} />
         <Stack.Screen name="referral/index" options={{ headerShown: true, title: "Refer Friends" }} />
       </Stack>
       <PaywallModal />
