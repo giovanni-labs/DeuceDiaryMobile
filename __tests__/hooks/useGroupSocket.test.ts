@@ -46,20 +46,22 @@ describe("useGroupSocket", () => {
   });
 
   it("does not connect when groupId is null", () => {
-    renderHook(() => useGroupSocket(null));
+    const { unmount } = renderHook(() => useGroupSocket(null));
 
     expect(MockWebSocket.instances).toHaveLength(0);
+    unmount();
   });
 
   it("connects when groupId is provided", () => {
-    renderHook(() => useGroupSocket("group-1"));
+    const { unmount } = renderHook(() => useGroupSocket("group-1"));
 
     expect(MockWebSocket.instances).toHaveLength(1);
     expect(MockWebSocket.instances[0].url).toContain("/ws");
+    unmount();
   });
 
   it("sends join_group message on open", () => {
-    renderHook(() => useGroupSocket("group-1"));
+    const { unmount } = renderHook(() => useGroupSocket("group-1"));
 
     const ws = MockWebSocket.instances[0];
 
@@ -71,11 +73,12 @@ describe("useGroupSocket", () => {
       type: "join_group",
       groupId: "group-1",
     });
+    unmount();
   });
 
   it("calls onMessage for deuce_logged events", () => {
     const onMessage = jest.fn();
-    renderHook(() => useGroupSocket("group-1", onMessage));
+    const { unmount } = renderHook(() => useGroupSocket("group-1", onMessage));
 
     const ws = MockWebSocket.instances[0];
 
@@ -95,11 +98,12 @@ describe("useGroupSocket", () => {
       entry: { id: "1" },
       userId: "u1",
     });
+    unmount();
   });
 
   it("ignores non-deuce_logged events", () => {
     const onMessage = jest.fn();
-    renderHook(() => useGroupSocket("group-1", onMessage));
+    const { unmount } = renderHook(() => useGroupSocket("group-1", onMessage));
 
     const ws = MockWebSocket.instances[0];
 
@@ -108,11 +112,12 @@ describe("useGroupSocket", () => {
     });
 
     expect(onMessage).not.toHaveBeenCalled();
+    unmount();
   });
 
   it("ignores malformed JSON messages", () => {
     const onMessage = jest.fn();
-    renderHook(() => useGroupSocket("group-1", onMessage));
+    const { unmount } = renderHook(() => useGroupSocket("group-1", onMessage));
 
     const ws = MockWebSocket.instances[0];
 
@@ -122,6 +127,7 @@ describe("useGroupSocket", () => {
     }).not.toThrow();
 
     expect(onMessage).not.toHaveBeenCalled();
+    unmount();
   });
 
   it("closes WebSocket on unmount", () => {
