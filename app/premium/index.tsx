@@ -68,6 +68,8 @@ export default function PremiumScreen() {
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.back()}
+            accessibilityLabel="Back to Profile"
+            accessibilityRole="button"
           >
             <Text style={styles.backButtonText}>Back to Profile</Text>
           </TouchableOpacity>
@@ -131,6 +133,9 @@ export default function PremiumScreen() {
             plan === "monthly" && styles.toggleButtonActive,
           ]}
           onPress={() => setPlan("monthly")}
+          accessibilityRole="radio"
+          accessibilityState={{ selected: plan === "monthly" }}
+          accessibilityLabel="Monthly plan, $3.99"
         >
           <Text
             style={[
@@ -147,6 +152,9 @@ export default function PremiumScreen() {
             plan === "annual" && styles.toggleButtonActive,
           ]}
           onPress={() => setPlan("annual")}
+          accessibilityRole="radio"
+          accessibilityState={{ selected: plan === "annual" }}
+          accessibilityLabel="Annual plan, $29.99"
         >
           <Text
             style={[
@@ -169,6 +177,8 @@ export default function PremiumScreen() {
         onPress={handleUpgrade}
         disabled={upgrading}
         activeOpacity={0.85}
+        accessibilityLabel={upgrading ? "Upgrading" : `Upgrade to Premium, ${plan === "annual" ? "$29.99 per year" : "$3.99 per month"}`}
+        accessibilityRole="button"
       >
         <Text style={styles.ctaText}>
           {upgrading ? "Upgrading..." : "Upgrade to Premium"}

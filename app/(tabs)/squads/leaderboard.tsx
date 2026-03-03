@@ -32,7 +32,7 @@ export default function LeaderboardScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} accessibilityLabel="Go back" accessibilityRole="button">
           <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>🏆 Leaderboard</Text>
@@ -54,11 +54,11 @@ export default function LeaderboardScreen() {
             const rank = index + 1;
             const isTop3 = rank <= 3;
             return (
-              <View style={[styles.row, isTop3 && styles.rowTop3]}>
-                <Text style={[styles.rank, isTop3 && styles.rankTop3]}>
+              <View style={[styles.row, isTop3 && styles.rowTop3]} accessible accessibilityLabel={`Rank ${rank}, ${item.username ?? "Anonymous"}, ${item.deuceCount} ${item.deuceCount === 1 ? "deuce" : "deuces"}`}>
+                <Text style={[styles.rank, isTop3 && styles.rankTop3]} accessibilityElementsHidden>
                   {getRankDisplay(rank)}
                 </Text>
-                <View style={styles.info}>
+                <View style={styles.info} accessibilityElementsHidden>
                   <Text style={styles.username}>
                     {item.username ?? "Anonymous"}
                   </Text>
@@ -67,7 +67,7 @@ export default function LeaderboardScreen() {
                   </Text>
                 </View>
                 {rank === 1 && (
-                  <Text style={styles.crown}>👑</Text>
+                  <Text style={styles.crown} accessibilityElementsHidden>👑</Text>
                 )}
               </View>
             );

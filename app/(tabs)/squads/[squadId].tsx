@@ -97,6 +97,9 @@ function StreakCard({
               style={styles.streakInsuranceButton}
               onPress={onStreakPaywall}
               activeOpacity={0.8}
+              accessibilityLabel="Activate streak insurance"
+              accessibilityRole="button"
+              accessibilityHint="Protect your streak with Premium"
             >
               <Text style={styles.streakInsuranceText}>
                 {"\uD83D\uDEE1\uFE0F"} Streak Insurance
@@ -117,6 +120,8 @@ function StreakCard({
               style={styles.streakLossPrompt}
               onPress={onStreakPaywall}
               activeOpacity={0.8}
+              accessibilityLabel="Recover from streak loss with Premium"
+              accessibilityRole="button"
             >
               <Text style={styles.streakLossEmoji}>{"\uD83D\uDCA8"}</Text>
               <Text style={styles.streakLossTitle}>Never lose your streak again</Text>
@@ -131,16 +136,16 @@ function StreakCard({
       {/* Member checklist */}
       <View style={styles.memberChecklist}>
         {streak.logsToday.map((member) => (
-          <View key={member.userId} style={styles.memberRow}>
+          <View key={member.userId} style={styles.memberRow} accessible accessibilityLabel={`${member.username}, ${member.hasLogged ? "logged today" : "not yet logged"}`}>
             <View style={styles.memberAvatar}>
-              <Text style={styles.memberAvatarText}>
+              <Text style={styles.memberAvatarText} accessibilityElementsHidden>
                 {(member.username?.[0] ?? "?").toUpperCase()}
               </Text>
             </View>
             <Text style={styles.memberName} numberOfLines={1}>
               {member.username}
             </Text>
-            <Text style={styles.memberStatus}>
+            <Text style={styles.memberStatus} accessibilityElementsHidden>
               {member.hasLogged ? "\u2705" : "\u23F3"}
             </Text>
           </View>
@@ -191,6 +196,8 @@ function FeedCard({
             style={styles.reactionButton}
             onPress={() => onReact(item.id, emoji)}
             activeOpacity={0.6}
+            accessibilityLabel={`React with ${emoji}`}
+            accessibilityRole="button"
           >
             <Text style={styles.reactionEmoji}>{emoji}</Text>
           </TouchableOpacity>
@@ -323,6 +330,9 @@ export default function SquadDetailScreen() {
           onPress={handleInvite}
           activeOpacity={0.8}
           disabled={inviting}
+          accessibilityLabel="Invite your crew"
+          accessibilityRole="button"
+          accessibilityHint="Create and share an invite link"
         >
           {inviting ? (
             <ActivityIndicator color={Colors.white} size="small" />
@@ -334,6 +344,8 @@ export default function SquadDetailScreen() {
           style={styles.leaderboardButton}
           onPress={() => router.push({ pathname: "/(tabs)/squads/leaderboard", params: { groupId: squadId } })}
           activeOpacity={0.8}
+          accessibilityLabel="View leaderboard"
+          accessibilityRole="button"
         >
           <Text style={styles.leaderboardButtonText}>🏆 Leaderboard</Text>
         </TouchableOpacity>
@@ -387,8 +399,10 @@ export default function SquadDetailScreen() {
         style={styles.fab}
         onPress={() => router.push("/modals/log-a-deuce")}
         activeOpacity={0.85}
+        accessibilityLabel="Log a deuce"
+        accessibilityRole="button"
       >
-        <Text style={styles.fabEmoji}>🚽</Text>
+        <Text style={styles.fabEmoji} accessibilityElementsHidden>🚽</Text>
       </TouchableOpacity>
     </View>
   );

@@ -33,8 +33,9 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarLabel: "Home",
+          tabBarAccessibilityLabel: "Home tab",
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>
+            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }} accessibilityElementsHidden>
               🏠
             </Text>
           ),
@@ -45,8 +46,9 @@ export default function TabLayout() {
         options={{
           title: "Squads",
           tabBarLabel: "Squads",
+          tabBarAccessibilityLabel: "Squads tab",
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>
+            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }} accessibilityElementsHidden>
               👥
             </Text>
           ),
@@ -61,9 +63,11 @@ export default function TabLayout() {
             <Pressable
               style={styles.logButtonContainer}
               onPress={() => router.push("/modals/log-a-deuce")}
+              accessibilityLabel="Log a deuce"
+              accessibilityRole="button"
             >
               <View style={styles.logButton}>
-                <Text style={styles.logEmoji}>🚽</Text>
+                <Text style={styles.logEmoji} accessibilityElementsHidden>🚽</Text>
               </View>
             </Pressable>
           ),
@@ -74,8 +78,9 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           tabBarLabel: "Profile",
+          tabBarAccessibilityLabel: "Profile tab",
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>
+            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }} accessibilityElementsHidden>
               👤
             </Text>
           ),

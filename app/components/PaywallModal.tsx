@@ -99,6 +99,9 @@ export function PaywallModal() {
             onPress={() => handlePurchase("annual")}
             disabled={purchasing !== null}
             activeOpacity={0.85}
+            accessibilityLabel="Subscribe annually for $19.99 per year, save 44%"
+            accessibilityHint="Starts annual Premium subscription"
+            accessibilityRole="button"
           >
             {purchasing === "annual" ? (
               <ActivityIndicator color={Colors.white} />
@@ -119,6 +122,9 @@ export function PaywallModal() {
             onPress={() => handlePurchase("monthly")}
             disabled={purchasing !== null}
             activeOpacity={0.85}
+            accessibilityLabel="Subscribe monthly for $2.99 per month"
+            accessibilityHint="Starts monthly Premium subscription"
+            accessibilityRole="button"
           >
             {purchasing === "monthly" ? (
               <ActivityIndicator color={Colors.espresso} />

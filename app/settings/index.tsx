@@ -90,6 +90,9 @@ export default function SettingsScreen() {
             onPress={() => handleSelect(t)}
             disabled={saving}
             activeOpacity={0.7}
+            accessibilityLabel={`${t.name} theme${isLocked ? ", premium" : ""}${isActive ? ", selected" : ""}`}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: isActive, disabled: saving }}
           >
             <View
               style={[

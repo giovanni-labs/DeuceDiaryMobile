@@ -43,7 +43,7 @@ export default function ProfileScreen() {
         <Text style={styles.email}>{user.email}</Text>
       ) : null}
       {!isPremium && (
-        <TouchableOpacity onPress={() => router.push("/premium")} activeOpacity={0.6}>
+        <TouchableOpacity onPress={() => router.push("/premium")} activeOpacity={0.6} accessibilityLabel="Go Premium" accessibilityRole="button">
           <Text style={styles.goPremium}>Go Premium {"\uD83D\uDC51"}</Text>
         </TouchableOpacity>
       )}
@@ -76,6 +76,9 @@ export default function ProfileScreen() {
             style={styles.reportBlurOverlay}
             onPress={() => showPaywall("premium_analytics")}
             activeOpacity={0.85}
+            accessibilityLabel="See full weekly throne report"
+            accessibilityHint="Unlock detailed analytics with Premium"
+            accessibilityRole="button"
           >
             {/* Fake blurred rows underneath */}
             <View style={styles.reportBlurredContent} pointerEvents="none">
@@ -112,6 +115,8 @@ export default function ProfileScreen() {
         style={styles.settingsButton}
         onPress={() => router.push("/referral")}
         activeOpacity={0.7}
+        accessibilityLabel="Refer friends"
+        accessibilityRole="button"
       >
         <Text style={styles.settingsText}>Refer Friends {"\uD83C\uDF81"}</Text>
       </TouchableOpacity>
@@ -119,10 +124,12 @@ export default function ProfileScreen() {
         style={styles.settingsButton}
         onPress={() => router.push("/settings")}
         activeOpacity={0.7}
+        accessibilityLabel="Theme and settings"
+        accessibilityRole="button"
       >
         <Text style={styles.settingsText}>Theme & Settings</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityLabel="Log out" accessibilityRole="button">
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
     </ScrollView>

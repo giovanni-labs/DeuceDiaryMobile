@@ -128,6 +128,8 @@ export default function LogADeuceModal() {
           multiline
           numberOfLines={4}
           textAlignVertical="top"
+          accessibilityLabel="Thought"
+          accessibilityHint="Share what's on your mind, up to 500 characters"
         />
         <Text
           style={[
@@ -145,6 +147,8 @@ export default function LogADeuceModal() {
           placeholderTextColor={Colors.gray}
           value={location}
           onChangeText={setLocation}
+          accessibilityLabel="Location"
+          accessibilityHint="Optionally enter where you are"
         />
 
         {squads && squads.length > 0 ? (
@@ -167,6 +171,9 @@ export default function LogADeuceModal() {
                     ]}
                     onPress={() => toggleGroup(squad.id)}
                     activeOpacity={0.7}
+                    accessibilityLabel={`${squad.name}${isSelected ? ", selected" : ""}`}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: isSelected }}
                   >
                     <Text
                       style={[
@@ -188,6 +195,9 @@ export default function LogADeuceModal() {
           onPress={handleSubmit}
           disabled={submitting || isOverLimit}
           activeOpacity={0.8}
+          accessibilityLabel="Drop it"
+          accessibilityRole="button"
+          accessibilityHint="Submit your deuce entry"
         >
           {submitting ? (
             <ActivityIndicator color={Colors.white} />
@@ -200,6 +210,8 @@ export default function LogADeuceModal() {
           style={styles.cancelButton}
           onPress={() => router.back()}
           activeOpacity={0.6}
+          accessibilityLabel="Cancel"
+          accessibilityRole="button"
         >
           <Text style={styles.cancelText}>Cancel</Text>
         </TouchableOpacity>

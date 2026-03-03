@@ -145,6 +145,8 @@ export default function SquadsScreen() {
             autoFocus
             returnKeyType="done"
             onSubmitEditing={handleCreate}
+            accessibilityLabel="Squad name"
+            accessibilityHint="Enter a name for your new squad"
           />
           <TouchableOpacity
             style={styles.createSubmit}
